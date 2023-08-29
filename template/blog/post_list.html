@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+{% extends 'blog/base.html'%}
+{% block title%}AdHunt{% endblock%}
+
+
+{% block content%}
+<!-- <h1 id="home_header">Onsaa-Tech</h1> -->
+<!-- <hr> -->
+
+        {% if tag %}
+            <h2>Post tag with "{{tag.name|title}}"</h2>
+            <hr>
+        {% endif %}
+
+        {% for post in page_obj %}
+    
+        <h2 ><a id="h2_title" href="{{post.get_absolute_url}}" target="_blank" rel="noopener noreferrer">{{post.title|truncatewords:7}}</a></h2>
+        <small id="time_a" >Published on {{post.publish}} by {{post.author|title}}</small><br>
+        <small>Tags : 
+            {% for tag in post.tags.all %}
+                <a href="{% url 'post_list_by_tag_name' tag.slug %}" class="btn btn-sm btn-outline-light my-2">{{tag.name|title}}</a> 
+                <!-- {% if not forloop.last %},{% endif %} -->
+            {% endfor %}
+        </small>
+        <div>
+        <p>{{post.body|safe|truncatewords:25|linebreaks}}
+            <a id="p_a" href="{{post.get_absolute_url}}" target="_blank" rel="noopener noreferrer">read more</a>
+        </p>
+        </div>
+        <hr>
+    
+    {% endfor%}
+            
+<!-- =========================Pagination============================= -->
+    <!-- <div class="pagination-container">
+        {% if page_obj.has_previous %}
+
+        <a href="?page={{page_obj.previous_page_number}}"> Previous</a>
+
+        {% endif %}
+
+        <span>Page {{page_obj.number}} of {{page_obj.paginator.num_pages}}</span>
+
+        {% if page_obj.has_next %}
+
+        <a href="?page={{page_obj.next_page_number}}"> Next</a>
+
+        {% endif %}
+
+    </div> -->
+
+    {% include 'blog/pagination.html' with page=post_list %}
+    
+
+{% endblock%}

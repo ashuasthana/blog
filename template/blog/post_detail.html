@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+{% extends 'blog/base.html' %}
+{% block title%}{{post.title}}{% endblock%}
+{% block content%}
+    <!--Post section====================================================== -->
+    <div>
+        <h1>{{post.title}}</h1>
+        
+        <small id="time_a" >Published on {{post.publish}} by {{post.author|title}}</small><br>
+            <p><img src="https://m.media-amazon.com/images/I/61Tw6LZoaiL._SL1500_.jpg" alt="Pineapple" style="width:170px;height:170px;margin-left:15px;">{{post.body|safe|linebreaks}}</p>
+            <hr>
+            <a class="btn btn-light" href="/">Home</a> 
+            <a class="btn btn-primary" href="/{{post.id}}/share">Share</a>
+    </div>
+    <hr>
+    <!--Post Comment section====================================================== -->
+    {% with comments.count as comments_count %}
+    <h2>Comment{{ comments_count|pluralize }} : {{ comments_count }} </h2>
+    {% endwith %}
+    {% if comments %}
+        {% for comment in comments %}
+        <h6> {{comment.body}}</h6>
+        <small id="time_a" >Comment {{forloop.counter}} By {{comment.name}} on {{comment.created}}</small>
+            
+            <hr>
+        {% endfor %}  
+        {% endif %}  
+        {% if comment_submit %} 
+            <h2>Your Comment Added Successfully !!!</h2>
+        {%else%}    
+            <div class="comment">
+                <form method="post" >
+                    {{form.as_p}}
+                    {%csrf_token%}
+                    <input type="submit" value="Submit" name="" class="btn-success">
+                </form>   
+            </div>   
+        {% endif %}  
+        
+
+        <!-- I am using this script for not submitting form data on refreshing web browser-->
+        <script>
+            if ( window.history.replaceState ) {
+                window.history.replaceState( null, null, window.location.href );
+            }
+        </script>
+{% endblock%}
